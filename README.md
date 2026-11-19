@@ -16,3 +16,4 @@ A simple Python application used to practice Git and GitHub.
 python3 src/app.py
 # Version 1.0
 Upcoming features and development notes
+Reporting module documentation
