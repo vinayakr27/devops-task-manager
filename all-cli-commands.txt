@@ -1,0 +1,1182 @@
+[ec2-user@ip-172-31-0-109 ~]$ git config --list
+user.name=Vinayak
+user.email=vinayak.gnit@gamil.com
+[ec2-user@ip-172-31-0-109 ~]$ git config user.name
+Vinayak
+[ec2-user@ip-172-31-0-109 ~]$ mkdir devops-task-manager
+[ec2-user@ip-172-31-0-109 ~]$ cd devops-task-manager/
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git init -b main
+Initialized empty Git repository in /home/ec2-user/devops-task-manager/.git/
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ tree
+.
+
+0 directories, 0 files
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ tree -a
+.
+└── .git
+    ├── HEAD
+    ├── config
+    ├── description
+    ├── hooks
+    │   ├── applypatch-msg.sample
+    │   ├── commit-msg.sample
+    │   ├── fsmonitor-watchman.sample
+    │   ├── post-update.sample
+    │   ├── pre-applypatch.sample
+    │   ├── pre-commit.sample
+    │   ├── pre-merge-commit.sample
+    │   ├── pre-push.sample
+    │   ├── pre-rebase.sample
+    │   ├── pre-receive.sample
+    │   ├── prepare-commit-msg.sample
+    │   ├── push-to-checkout.sample
+    │   ├── sendemail-validate.sample
+    │   └── update.sample
+    ├── info
+    │   └── exclude
+    ├── objects
+    │   ├── info
+    │   └── pack
+    └── refs
+        ├── heads
+        └── tags
+
+9 directories, 18 files
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch main
+
+No commits yet
+
+nothing to commit (create/copy files and use "git add" to track)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ ls -la
+total 16
+drwxr-xr-x. 3 ec2-user ec2-user    18 Nov 19 17:21 .
+drwx------. 5 ec2-user ec2-user 16384 Nov 19 17:21 ..
+drwxr-xr-x. 6 ec2-user ec2-user   103 Nov 19 17:22 .git
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ mkdir -p src tests logs config
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ tree
+.
+├── config
+├── logs
+├── src
+└── tests
+
+4 directories, 0 files
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ cat > src/app.py <<'EOF'
+from config import APP_NAME
+from database import get_tasks
+
+def main():
+    print(f"Welcome to {APP_NAME}")
+
+    tasks = get_tasks()
+
+    print("\nAvailable Tasks:")
+    for task in tasks:
+        print(f"- {task}")
+
+if __name__ == "__main__":
+    main()
+EOF
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ cat > src/config.py <<'EOF'
+APP_NAME = "DevOps Task Manager"
+APP_VERSION = "1.0.0"
+ENVIRONMENT = "development"
+EOF
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ cat > src/database.py <<'EOF'
+def get_tasks():
+    return [
+        "Learn Git",
+        "Learn Docker",
+        "Learn Jenkins"
+    ]
+EOF
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ cat > requirements.txt <<'EOF'
+# No external dependencies required for this practice project.
+EOF
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ cat > README.md <<'EOF'
+# DevOps Task Manager
+
+A simple Python application used to practice Git and GitHub.
+
+## Features
+- Display application information
+- Display available tasks
+- Manage project versions
+
+## Technology
+- Python
+- Git
+- GitHub
+
+## Run
+python3 src/app.py
+EOF
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ cat > .gitignore <<'EOF'
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment files
+.env
+
+# Logs
+logs/
+*.log
+
+# Virtual environment
+venv/
+
+# Editor files
+.vscode/
+
+# Temporary files
+*.tmp
+EOF
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ echo "temporary application log" > logs/app.log
+echo "SECRET_KEY=do-not-upload" > .env
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ python3 src/app.py
+Welcome to DevOps Task Manager
+
+Available Tasks:
+- Learn Git
+- Learn Docker
+- Learn Jenkins
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch main
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        .gitignore
+        README.md
+        requirements.txt
+        src/
+
+nothing added to commit but untracked files present (use "git add" to track)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add .
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch main
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+        new file:   .gitignore
+        new file:   README.md
+        new file:   requirements.txt
+        new file:   src/app.py
+        new file:   src/config.py
+        new file:   src/database.py
+
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git diff --staged
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..a712466
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,19 @@
++# Python cache
++__pycache__/
++*.pyc
++
++# Environment files
++.env
++
++# Logs
++logs/
++*.log
++
++# Virtual environment
++venv/
++
++# Editor files
++.vscode/
++
++# Temporary files
++*.tmp
+diff --git a/README.md b/README.md
+new file mode 100644
+index 0000000..4ff9fa1
+--- /dev/null
++++ b/README.md
+@@ -0,0 +1,16 @@
++# DevOps Task Manager
++
++A simple Python application used to practice Git and GitHub.
++
++## Features
++- Display application information
++- Display available tasks
++- Manage project versions
++
++## Technology
++- Python
++- Git
++- GitHub
++
++## Run
++python3 src/app.py
+diff --git a/requirements.txt b/requirements.txt
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Initial commit: create task manager application"
+[main (root-commit) 3c8119b] Initial commit: create task manager application
+ 6 files changed, 59 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 README.md
+ create mode 100644 requirements.txt
+ create mode 100644 src/app.py
+ create mode 100644 src/config.py
+ create mode 100644 src/database.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline
+3c8119b (HEAD -> main) Initial commit: create task manager application
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch main
+nothing to commit, working tree clean
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ echo "# Version 1.0" >> README.md
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git diff
+diff --git a/README.md b/README.md
+index 4ff9fa1..d82b6b6 100644
+--- a/README.md
++++ b/README.md
+@@ -14,3 +14,4 @@ A simple Python application used to practice Git and GitHub.
+
+ ## Run
+ python3 src/app.py
++# Version 1.0
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add README.md
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git diff
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git diff --staged
+diff --git a/README.md b/README.md
+index 4ff9fa1..d82b6b6 100644
+--- a/README.md
++++ b/README.md
+@@ -14,3 +14,4 @@ A simple Python application used to practice Git and GitHub.
+
+ ## Run
+ python3 src/app.py
++# Version 1.0
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Update project documentation"
+[main f0391c6] Update project documentation
+ 1 file changed, 1 insertion(+)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch -c development
+Switched to a new branch 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git branch
+* development
+  main
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch -c feature/login
+Switched to a new branch 'feature/login'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git branch
+  development
+* feature/login
+  main
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ cat > src/auth.py <<'EOF'
+def authenticate(username, password):
+    if username == "admin" and password == "admin123":
+        return True
+
+    return False
+EOF
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ ls
+README.md  config  logs  requirements.txt  src  tests
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch main
+Switched to branch 'main'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ ls
+README.md  config  logs  requirements.txt  src  tests
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ ls /src
+ls: cannot access '/src': No such file or directory
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ cd src
+[ec2-user@ip-172-31-0-109 src]$ ls
+__pycache__  app.py  auth.py  config.py  database.py
+[ec2-user@ip-172-31-0-109 src]$ cat auth.py
+def authenticate(username, password):
+    if username == "admin" and password == "admin123":
+        return True
+
+    return False
+[ec2-user@ip-172-31-0-109 src]$ git branch
+  development
+  feature/login
+* main
+[ec2-user@ip-172-31-0-109 src]$ git switch feature/login
+Switched to branch 'feature/login'
+[ec2-user@ip-172-31-0-109 src]$ git add src/auth.py
+warning: could not open directory 'src/src/': No such file or directory
+fatal: pathspec 'src/auth.py' did not match any files
+[ec2-user@ip-172-31-0-109 src]$ cd ..
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add src/auth.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit - "Add user authentication module"
+error: pathspec '-' did not match any file(s) known to git
+error: pathspec 'Add user authentication module' did not match any file(s) known to git
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Add user authentication modu
+le"
+[feature/login 5ed170b] Add user authentication module
+ 1 file changed, 5 insertions(+)
+ create mode 100644 src/auth.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline --graph --all
+* 5ed170b (HEAD -> feature/login) Add user authentication module
+* f0391c6 (main, development) Update project documentation
+* 3c8119b Initial commit: create task manager application
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch development
+Switched to branch 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git merge feature/login
+Updating f0391c6..5ed170b
+Fast-forward
+ src/auth.py | 5 +++++
+ 1 file changed, 5 insertions(+)
+ create mode 100644 src/auth.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ ls src/
+__pycache__  app.py  auth.py  config.py  database.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git branch -d feature/login
+Deleted branch feature/login (was 5ed170b).
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch -c feature/tasks
+Switched to a new branch 'feature/tasks'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ cat > src/tasks.py <<'EOF'
+def get_all_tasks():
+    return [
+        "Learn Git",
+        "Learn Docker",
+        "Learn Jenkins",
+        "Learn Terraform",
+        "Learn AWS"
+    ]
+
+def add_task(task):
+    print(f"Task added: {task}")
+EOF
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add src/tasks.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Add task management module"
+[feature/tasks 99d4e4f] Add task management module
+ 1 file changed, 11 insertions(+)
+ create mode 100644 src/tasks.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch development
+Switched to branch 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git merge feature/tasks
+Updating 5ed170b..99d4e4f
+Fast-forward
+ src/tasks.py | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+ create mode 100644 src/tasks.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch -c feature/login-banner
+Switched to a new branch 'feature/login-banner'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ sed -i 's/DevOps Task Manager/DevOps Task Manager - Login Edition/' src/config.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add src/config.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Update application name for login module"
+[feature/login-banner 159f276] Update application name for login module
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch development
+Switched to branch 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch -c feature/task-banner
+Switched to a new branch 'feature/task-banner'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ sed -i 's/DevOps Task Manager/DevOps Task Manager - Task Edition/' src/config.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add src/config.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Update application name for task module"
+[feature/task-banner 7b28c2f] Update application name for task module
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch development
+Switched to branch 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git merge feature/login-banner
+Updating 99d4e4f..159f276
+Fast-forward
+ src/config.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git merge feature/task-banner
+Auto-merging src/config.py
+CONFLICT (content): Merge conflict in src/config.py
+Automatic merge failed; fix conflicts and then commit the result.
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ cat src/config.py
+<<<<<<< HEAD
+APP_NAME = "DevOps Task Manager - Login Edition"
+=======
+APP_NAME = "DevOps Task Manager - Task Edition"
+>>>>>>> feature/task-banner
+APP_VERSION = "1.0.0"
+ENVIRONMENT = "development"
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ cat > src/config.py <<'EOF'
+APP_NAME = "DevOps Task Manager"
+APP_VERSION = "1.0.0"
+ENVIRONMENT = "development"
+EOF
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git atatus
+git: 'atatus' is not a git command. See 'git --help'.
+
+The most similar command is
+        status
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch development
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+  (use "git merge --abort" to abort the merge)
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+        both modified:   src/config.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git diff
+diff --cc src/config.py
+index a7f4082,655bab5..0000000
+--- a/src/config.py
++++ b/src/config.py
+@@@ -1,3 -1,3 +1,3 @@@
+- APP_NAME = "DevOps Task Manager - Login Edition"
+ -APP_NAME = "DevOps Task Manager - Task Edition"
+++APP_NAME = "DevOps Task Manager"
+  APP_VERSION = "1.0.0"
+  ENVIRONMENT = "development"
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add src/config.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Resolve application configuration merge conflict"
+[development 061502e] Resolve application configuration merge conflict
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline --graph --all
+*   061502e (HEAD -> development) Resolve application configuration merge conflict
+|\
+| * 7b28c2f (feature/task-banner) Update application name for task module
+* | 159f276 (feature/login-banner) Update application name for login module
+|/
+* 99d4e4f (feature/tasks) Add task management module
+* 5ed170b Add user authentication module
+* f0391c6 (main) Update project documentation
+* 3c8119b Initial commit: create task manager application
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch development
+Already on 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ echo "Upcoming features and development notes" >> README.md
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ echo "This is unfinished work" > src/unfinished.txt
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch development
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        src/unfinished.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch main
+M       README.md
+Switched to branch 'main'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch development
+M       README.md
+Switched to branch 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch development
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        src/unfinished.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git stash push -u -m "Unfinished feature development"
+Saved working directory and index state On development: Unfinished feature development
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git stash
+No local changes to save
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git stash list
+stash@{0}: On development: Unfinished feature development
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch development
+nothing to commit, working tree clean
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch main
+Switched to branch 'main'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch development
+Switched to branch 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git stash pop
+On branch development
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        src/unfinished.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (832d46c968e7c7ea27287187489ad284e1167b37)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch development
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        src/unfinished.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git stash list
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add .
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Add development notes"
+[development 6bce0c2] Add development notes
+ 2 files changed, 2 insertions(+)
+ create mode 100644 src/unfinished.txt
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git stash list
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git stash apply
+No stash entries found.
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git stash drop
+No stash entries found.
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git stash
+No local changes to save
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch -c bugfix/login
+Switched to a new branch 'bugfix/login'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ cat > src/bugfix.py <<'EOF'
+def validate_username(username):
+    if not username:
+        return False
+
+    return True
+EOF
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add src/bugfix.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Fix empty username validation"
+[bugfix/login 28d03ed] Fix empty username validation
+ 1 file changed, 5 insertions(+)
+ create mode 100644 src/bugfix.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline -1
+28d03ed (HEAD -> bugfix/login) Fix empty username validation
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline -2
+28d03ed (HEAD -> bugfix/login) Fix empty username validation
+6bce0c2 (development) Add development notes
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline -1
+28d03ed (HEAD -> bugfix/login) Fix empty username validation
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch development
+Switched to branch 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git cherry-pick 28d03ed
+[development b8b17df] Fix empty username validation
+ Date: Thu Nov 19 17:47:18 2026 +0000
+ 1 file changed, 5 insertions(+)
+ create mode 100644 src/bugfix.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline --graph --all
+* b8b17df (HEAD -> development) Fix empty username validation
+| * 28d03ed (bugfix/login) Fix empty username validation
+|/
+* 6bce0c2 Add development notes
+*   061502e Resolve application configuration merge conflict
+|\
+| * 7b28c2f (feature/task-banner) Update application name for task module
+* | 159f276 (feature/login-banner) Update application name for login module
+|/
+* 99d4e4f (feature/tasks) Add task management module
+* 5ed170b Add user authentication module
+* f0391c6 (main) Update project documentation
+* 3c8119b Initial commit: create task manager application
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch development
+Already on 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch -c feature/reports
+Switched to a new branch 'feature/reports'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ cat > src/report.py <<'EOF'
+def generate_report():
+    return "DevOps Task Manager Report"
+EOF
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add src/report.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Add report generation module"
+[feature/reports e0bbd4a] Add report generation module
+ 1 file changed, 2 insertions(+)
+ create mode 100644 src/report.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch development
+Switched to branch 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ echo "Reporting module documentation" >> README.md
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add README.md
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Update development documentation"
+[development e93dacf] Update development documentation
+ 1 file changed, 1 insertion(+)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch feature/reports
+Switched to branch 'feature/reports'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git branch
+  bugfix/login
+  development
+  feature/login-banner
+* feature/reports
+  feature/task-banner
+  feature/tasks
+  main
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git rebase developmemt
+fatal: invalid upstream 'developmemt'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git rebase development
+Successfully rebased and updated refs/heads/feature/reports.
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline --graph --all
+* 241e400 (HEAD -> feature/reports) Add report generation module
+* e93dacf (development) Update development documentation
+* b8b17df Fix empty username validation
+| * 28d03ed (bugfix/login) Fix empty username validation
+|/
+* 6bce0c2 Add development notes
+*   061502e Resolve application configuration merge conflict
+|\
+| * 7b28c2f (feature/task-banner) Update application name for task module
+* | 159f276 (feature/login-banner) Update application name for login module
+|/
+* 99d4e4f (feature/tasks) Add task management module
+* 5ed170b Add user authentication module
+* f0391c6 (main) Update project documentation
+* 3c8119b Initial commit: create task manager application
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch development
+Switched to branch 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git merge feature/reports
+Updating e93dacf..241e400
+Fast-forward
+ src/report.py | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 src/report.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline --graph --all
+* 241e400 (HEAD -> development, feature/reports) Add report generation module
+* e93dacf Update development documentation
+* b8b17df Fix empty username validation
+| * 28d03ed (bugfix/login) Fix empty username validation
+|/
+* 6bce0c2 Add development notes
+*   061502e Resolve application configuration merge conflict
+|\
+| * 7b28c2f (feature/task-banner) Update application name for task module
+* | 159f276 (feature/login-banner) Update application name for login module
+|/
+* 99d4e4f (feature/tasks) Add task management module
+* 5ed170b Add user authentication module
+* f0391c6 (main) Update project documentation
+* 3c8119b Initial commit: create task manager application
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch development
+Already on 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch -c reset-lab
+Switched to a new branch 'reset-lab'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ echo "Reset demonstration" > reset-demo.txt
+git add reset-demo.txt
+git commit -m "Add reset demonstration"
+[reset-lab 8627254] Add reset demonstration
+ 1 file changed, 1 insertion(+)
+ create mode 100644 reset-demo.txt
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add reset-demo.txt
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Add reset documentation"
+On branch reset-lab
+nothing to commit, working tree clean
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline -1
+8627254 (HEAD -> reset-lab) Add reset demonstration
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git reset --soft HEAD~1
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch reset-lab
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   reset-demo.txt
+
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Recommit reset demonstration"
+[reset-lab 30e6b2c] Recommit reset demonstration
+ 1 file changed, 1 insertion(+)
+ create mode 100644 reset-demo.txt
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git reset --mixed HEAD~1
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch reset-lab
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        reset-demo.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add reset-demo.txt
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Commit after mixed reset"
+[reset-lab 2025d21] Commit after mixed reset
+ 1 file changed, 1 insertion(+)
+ create mode 100644 reset-demo.txt
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ echo "Temporary data" >> reset-demo.txt
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add reset-demo.txt
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Add temporary reset data"
+[reset-lab 5e08dfd] Add temporary reset data
+ 1 file changed, 1 insertion(+)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline -3
+5e08dfd (HEAD -> reset-lab) Add temporary reset data
+2025d21 Commit after mixed reset
+241e400 (feature/reports, development) Add report generation module
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git reset --hard HEAD~1
+HEAD is now at 2025d21 Commit after mixed reset
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline -3
+2025d21 (HEAD -> reset-lab) Commit after mixed reset
+241e400 (feature/reports, development) Add report generation module
+e93dacf Update development documentation
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git reflog
+2025d21 (HEAD -> reset-lab) HEAD@{0}: reset: moving to HEAD~1
+5e08dfd HEAD@{1}: commit: Add temporary reset data
+2025d21 (HEAD -> reset-lab) HEAD@{2}: commit: Commit after mixed reset
+241e400 (feature/reports, development) HEAD@{3}: reset: moving to HEAD~1
+30e6b2c HEAD@{4}: commit: Recommit reset demonstration
+241e400 (feature/reports, development) HEAD@{5}: reset: moving to HEAD~1
+8627254 HEAD@{6}: commit: Add reset demonstration
+241e400 (feature/reports, development) HEAD@{7}: checkout: moving from development to reset-lab
+241e400 (feature/reports, development) HEAD@{8}: checkout: moving from development to development
+241e400 (feature/reports, development) HEAD@{9}: merge feature/reports: Fast-forward
+e93dacf HEAD@{10}: checkout: moving from feature/reports to development
+241e400 (feature/reports, development) HEAD@{11}: rebase (finish): returning to refs/heads/feature/reports
+241e400 (feature/reports, development) HEAD@{12}: rebase (pick): Add report generation module
+e93dacf HEAD@{13}: rebase (start): checkout development
+e0bbd4a HEAD@{14}: checkout: moving from development to feature/reports
+e93dacf HEAD@{15}: commit: Update development documentation
+b8b17df HEAD@{16}: checkout: moving from feature/reports to development
+e0bbd4a HEAD@{17}: commit: Add report generation module
+b8b17df HEAD@{18}: checkout: moving from development to feature/reports
+b8b17df HEAD@{19}: checkout: moving from development to development
+b8b17df HEAD@{20}: cherry-pick: Fix empty username validation
+6bce0c2 HEAD@{21}: checkout: moving from bugfix/login to development
+28d03ed (bugfix/login) HEAD@{22}: commit: Fix empty username validation
+6bce0c2 HEAD@{23}: checkout: moving from development to bugfix/login
+6bce0c2 HEAD@{24}: commit: Add development notes
+061502e HEAD@{25}: checkout: moving from main to development
+f0391c6 (main) HEAD@{26}: checkout: moving from development to main
+061502e HEAD@{27}: reset: moving to HEAD
+061502e HEAD@{28}: checkout: moving from main to development
+f0391c6 (main) HEAD@{29}: checkout: moving from development to main
+061502e HEAD@{30}: checkout: moving from development to development
+061502e HEAD@{31}: commit (merge): Resolve application configuration merge conflict
+159f276 (feature/login-banner) HEAD@{32}: merge feature/login-banner: Fast-forward
+99d4e4f (feature/tasks) HEAD@{33}: checkout: moving from feature/task-banner to development
+7b28c2f (feature/task-banner) HEAD@{34}: commit: Update application name for task module
+99d4e4f (feature/tasks) HEAD@{35}: checkout: moving from development to feature/task-banner
+99d4e4f (feature/tasks) HEAD@{36}: checkout: moving from feature/login-banner to development
+159f276 (feature/login-banner) HEAD@{37}: commit: Update application name for login module
+99d4e4f (feature/tasks) HEAD@{38}: checkout: moving from development to feature/login-banner
+99d4e4f (feature/tasks) HEAD@{39}: merge feature/tasks: Fast-forward
+5ed170b HEAD@{40}: checkout: moving from feature/tasks to development
+99d4e4f (feature/tasks) HEAD@{41}: commit: Add task management module
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git reset --head 5e08dfd
+error: unknown option `head'
+usage: git reset [--mixed | --soft | --hard | --merge | --keep] [-q] [<commit>]
+   or: git reset [-q] [<tree-ish>] [--] <pathspec>...
+   or: git reset [-q] [--pathspec-from-file [--pathspec-file-nul]] [<tree-ish>]
+   or: git reset --patch [<tree-ish>] [--] [<pathspec>...]
+
+    -q, --[no-]quiet      be quiet, only report errors
+    --no-refresh          skip refreshing the index after reset
+    --refresh             opposite of --no-refresh
+    --mixed               reset HEAD and index
+    --soft                reset only HEAD
+    --hard                reset HEAD, index and working tree
+    --merge               reset HEAD, index and working tree
+    --keep                reset HEAD but keep local changes
+    --[no-]recurse-submodules[=<reset>]
+                          control recursive updating of submodules
+    -p, --[no-]patch      select hunks interactively
+    -N, --[no-]intent-to-add
+                          record only the fact that removed paths will be added later
+    --[no-]pathspec-from-file <file>
+                          read pathspec from file
+    --[no-]pathspec-file-nul
+                          with --pathspec-from-file, pathspec elements are separated with NUL character
+
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git reset --hard 5e08dfd
+HEAD is now at 5e08dfd Add temporary reset data
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline -3
+5e08dfd (HEAD -> reset-lab) Add temporary reset data
+2025d21 Commit after mixed reset
+241e400 (feature/reports, development) Add report generation module
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch development
+Switched to branch 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ echo "INVALID_SETTING=true" >>src/config.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add src/config.py
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Introduce incorrect configuration"
+[development 6eb8c2e] Introduce incorrect configuration
+ 1 file changed, 1 insertion(+)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline -3
+6eb8c2e (HEAD -> development) Introduce incorrect configuration
+241e400 (feature/reports) Add report generation module
+e93dacf Update development documentation
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git revert HEAD
+[development 98c8047] Revert "Introduce incorrect configuration"
+ 1 file changed, 1 deletion(-)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline -3
+98c8047 (HEAD -> development) Revert "Introduce incorrect configuration"
+6eb8c2e Introduce incorrect configuration
+241e400 (feature/reports) Add report generation module
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ cat src/config.py
+APP_NAME = "DevOps Task Manager"
+APP_VERSION = "1.0.0"
+ENVIRONMENT = "development"
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ echo "Wrong change" >> README.md
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git diff
+diff --git a/README.md b/README.md
+index c65fbea..9bb5b59 100644
+--- a/README.md
++++ b/README.md
+@@ -17,3 +17,4 @@ python3 src/app.py
+ # Version 1.0
+ Upcoming features and development notes
+ Reporting module documentation
++Wrong change
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git restore README.md
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git diff
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ echo "New documentation" >> README.md
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add README.md
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch development
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   README.md
+
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git restore --staged README.md
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch development
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ echo "Debug information" > debug.log
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status --ignored
+On branch development
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+Ignored files:
+  (use "git add -f <file>..." to include in what will be committed)
+        .env
+        debug.log
+        logs/
+        src/__pycache__/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add -f debug.log
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Track debug log for demonstr
+ation"
+[development 74d6c54] Track debug log for demonstration
+ 1 file changed, 1 insertion(+)
+ create mode 100644 debug.log
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git rm --cached debug.log
+rm 'debug.log'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Stop tracking debug log"
+[development 1d6f836] Stop tracking debug log
+ 1 file changed, 1 deletion(-)
+ delete mode 100644 debug.log
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ ls -l debug.log
+-rw-r--r--. 1 ec2-user ec2-user 18 Nov 19 18:03 debug.log
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status --ignored
+On branch development
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+Ignored files:
+  (use "git add -f <file>..." to include in what will be committed)
+        .env
+        debug.log
+        logs/
+        src/__pycache__/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch development
+M       README.md
+Already on 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git tag -a v1.0.0 -m "DevOps Task Manager first release"
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git tag
+v1.0.0
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git show v1.0.0
+tag v1.0.0
+Tagger: Vinayak <vinayak.gnit@gamil.com>
+Date:   Thu Nov 19 18:07:23 2026 +0000
+
+DevOps Task Manager first release
+
+commit 1d6f836bca8d03858944285b72490359291acb62 (HEAD -> development, tag: v1.0.0)
+Author: Vinayak <vinayak.gnit@gamil.com>
+Date:   Thu Nov 19 18:06:18 2026 +0000
+
+    Stop tracking debug log
+
+diff --git a/debug.log b/debug.log
+deleted file mode 100644
+index d8d5786..0000000
+--- a/debug.log
++++ /dev/null
+@@ -1 +0,0 @@
+-Debug information
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git tag -a v1.1.0 -m "New feature release"
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git tag
+v1.0.0
+v1.1.0
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git tag -d v1.1.0
+Deleted tag 'v1.1.0' (was d9b07d6)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline
+1d6f836 (HEAD -> development, tag: v1.0.0) Stop tracking debug log
+74d6c54 Track debug log for demonstration
+98c8047 Revert "Introduce incorrect configuration"
+6eb8c2e Introduce incorrect configuration
+241e400 (feature/reports) Add report generation module
+e93dacf Update development documentation
+b8b17df Fix empty username validation
+6bce0c2 Add development notes
+061502e Resolve application configuration merge conflict
+7b28c2f (feature/task-banner) Update application name for task module
+159f276 (feature/login-banner) Update application name for login module
+99d4e4f (feature/tasks) Add task management module
+5ed170b Add user authentication module
+f0391c6 (main) Update project documentation
+3c8119b Initial commit: create task manager application
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline --graph --all --decorate
+* 1d6f836 (HEAD -> development, tag: v1.0.0) Stop tracking debug log
+* 74d6c54 Track debug log for demonstration
+* 98c8047 Revert "Introduce incorrect configuration"
+* 6eb8c2e Introduce incorrect configuration
+| * 5e08dfd (reset-lab) Add temporary reset data
+| * 2025d21 Commit after mixed reset
+|/
+* 241e400 (feature/reports) Add report generation module
+* e93dacf Update development documentation
+* b8b17df Fix empty username validation
+| * 28d03ed (bugfix/login) Fix empty username validation
+|/
+* 6bce0c2 Add development notes
+*   061502e Resolve application configuration merge conflict
+|\
+| * 7b28c2f (feature/task-banner) Update application name for task module
+* | 159f276 (feature/login-banner) Update application name for login module
+|/
+* 99d4e4f (feature/tasks) Add task management module
+* 5ed170b Add user authentication module
+* f0391c6 (main) Update project documentation
+* 3c8119b Initial commit: create task manager application
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git show HEAD
+commit 1d6f836bca8d03858944285b72490359291acb62 (HEAD -> development, tag: v1.0.0)
+Author: Vinayak <vinayak.gnit@gamil.com>
+Date:   Thu Nov 19 18:06:18 2026 +0000
+
+    Stop tracking debug log
+
+diff --git a/debug.log b/debug.log
+deleted file mode 100644
+index d8d5786..0000000
+--- a/debug.log
++++ /dev/null
+@@ -1 +0,0 @@
+-Debug information
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git show 1d6f836bca8d03858944285b72490359291acb62
+commit 1d6f836bca8d03858944285b72490359291acb62 (HEAD -> development, tag: v1.0.0)
+Author: Vinayak <vinayak.gnit@gamil.com>
+Date:   Thu Nov 19 18:06:18 2026 +0000
+
+    Stop tracking debug log
+
+diff --git a/debug.log b/debug.log
+deleted file mode 100644
+index d8d5786..0000000
+--- a/debug.log
++++ /dev/null
+@@ -1 +0,0 @@
+-Debug information
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git blame src/config.py
+061502e2 (Vinayak 2026-11-19 17:41:19 +0000 1) APP_NAME = "DevOps Task Manager"
+^3c8119b (Vinayak 2026-11-19 17:26:11 +0000 2) APP_VERSION = "1.0.0"
+^3c8119b (Vinayak 2026-11-19 17:26:11 +0000 3) ENVIRONMENT = "development"
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git reflog
+1d6f836 (HEAD -> development, tag: v1.0.0) HEAD@{0}: checkout: moving from development to development
+1d6f836 (HEAD -> development, tag: v1.0.0) HEAD@{1}: commit: Stop tracking debug log
+74d6c54 HEAD@{2}: commit: Track debug log for demonstration
+98c8047 HEAD@{3}: revert: Revert "Introduce incorrect configuration"
+6eb8c2e HEAD@{4}: commit: Introduce incorrect configuration
+241e400 (feature/reports) HEAD@{5}: checkout: moving from reset-lab to development
+5e08dfd (reset-lab) HEAD@{6}: reset: moving to 5e08dfd
+2025d21 HEAD@{7}: reset: moving to HEAD~1
+5e08dfd (reset-lab) HEAD@{8}: commit: Add temporary reset data
+2025d21 HEAD@{9}: commit: Commit after mixed reset
+241e400 (feature/reports) HEAD@{10}: reset: moving to HEAD~1
+30e6b2c HEAD@{11}: commit: Recommit reset demonstration
+241e400 (feature/reports) HEAD@{12}: reset: moving to HEAD~1
+8627254 HEAD@{13}: commit: Add reset demonstration
+241e400 (feature/reports) HEAD@{14}: checkout: moving from development to reset-lab
+241e400 (feature/reports) HEAD@{15}: checkout: moving from development to development
+241e400 (feature/reports) HEAD@{16}: merge feature/reports: Fast-forward
+e93dacf HEAD@{17}: checkout: moving from feature/reports to development
+241e400 (feature/reports) HEAD@{18}: rebase (finish): returning to refs/heads/feature/reports
+241e400 (feature/reports) HEAD@{19}: rebase (pick): Add report generation module
+e93dacf HEAD@{20}: rebase (start): checkout development
+e0bbd4a HEAD@{21}: checkout: moving from development to feature/reports
+e93dacf HEAD@{22}: commit: Update development documentation
+b8b17df HEAD@{23}: checkout: moving from feature/reports to development
+e0bbd4a HEAD@{24}: commit: Add report generation module
+b8b17df HEAD@{25}: checkout: moving from development to feature/reports
+b8b17df HEAD@{26}: checkout: moving from development to development
+b8b17df HEAD@{27}: cherry-pick: Fix empty username validation
+6bce0c2 HEAD@{28}: checkout: moving from bugfix/login to development
+28d03ed (bugfix/login) HEAD@{29}: commit: Fix empty username validation
+6bce0c2 HEAD@{30}: checkout: moving from development to bugfix/login
+6bce0c2 HEAD@{31}: commit: Add development notes
+061502e HEAD@{32}: checkout: moving from main to development
+f0391c6 (main) HEAD@{33}: checkout: moving from development to main
+061502e HEAD@{34}: reset: moving to HEAD
+061502e HEAD@{35}: checkout: moving from main to development
+f0391c6 (main) HEAD@{36}: checkout: moving from development to main
+061502e HEAD@{37}: checkout: moving from development to development
+061502e HEAD@{38}: commit (merge): Resolve application configuration merge conflict
+159f276 (feature/login-banner) HEAD@{39}: merge feature/login-banner: Fast-forward
+99d4e4f (feature/tasks) HEAD@{40}: checkout: moving from feature/task-banner to development
+7b28c2f (feature/task-banner) HEAD@{41}: commit: Update application name for task module
+99d4e4f (feature/tasks) HEAD@{42}: checkout: moving from development to feature/task-banner
+99d4e4f (feature/tasks) HEAD@{43}: checkout: moving from feature/login-banner to development
+159f276 (feature/login-banner) HEAD@{44}: commit: Update application name for login module
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git branch -avv
+  bugfix/login         28d03ed Fix empty username validation
+* development          1d6f836 Stop tracking debug log
+  feature/login-banner 159f276 Update application name for login module
+  feature/reports      241e400 Add report generation module
+  feature/task-banner  7b28c2f Update application name for task module
+  feature/tasks        99d4e4f Add task management module
+  main                 f0391c6 Update project documentation
+  reset-lab            5e08dfd Add temporary reset data
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch development
+M       README.md
+Already on 'development'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch development
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git add README.md
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Finalize project documentaiton:
+>
+> sd
+> :
+> q
+>
+> wq
+> /
+> a
+> q
+>
+> dsv \
+> sd \
+>
+> ^C
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git commit -m "Finalize project documentation"
+[development 8d983ff] Finalize project documentation
+ 1 file changed, 1 insertion(+)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch development
+nothing to commit, working tree clean
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git switch main
+Switched to branch 'main'
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git merge --no-ff development -m "Release version v1.0.0"
+Merge made by the 'ort' strategy.
+ README.md          |  3 +++
+ src/auth.py        |  5 +++++
+ src/bugfix.py      |  5 +++++
+ src/report.py      |  2 ++
+ src/tasks.py       | 11 +++++++++++
+ src/unfinished.txt |  1 +
+ 6 files changed, 27 insertions(+)
+ create mode 100644 src/auth.py
+ create mode 100644 src/bugfix.py
+ create mode 100644 src/report.py
+ create mode 100644 src/tasks.py
+ create mode 100644 src/unfinished.txt
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git log --oneline --graph --all
+*   4862d58 (HEAD -> main) Release version v1.0.0
+|\
+| * 8d983ff (development) Finalize project documentation
+| * 1d6f836 (tag: v1.0.0) Stop tracking debug log
+| * 74d6c54 Track debug log for demonstration
+| * 98c8047 Revert "Introduce incorrect configuration"
+| * 6eb8c2e Introduce incorrect configuration
+| | * 5e08dfd (reset-lab) Add temporary reset data
+| | * 2025d21 Commit after mixed reset
+| |/
+| * 241e400 (feature/reports) Add report generation module
+| * e93dacf Update development documentation
+| * b8b17df Fix empty username validation
+| | * 28d03ed (bugfix/login) Fix empty username validation
+| |/
+| * 6bce0c2 Add development notes
+| *   061502e Resolve application configuration merge conflict
+| |\
+| | * 7b28c2f (feature/task-banner) Update application name for task module
+| * | 159f276 (feature/login-banner) Update application name for login module
+| |/
+| * 99d4e4f (feature/tasks) Add task management module
+| * 5ed170b Add user authentication module
+|/
+* f0391c6 Update project documentation
+* 3c8119b Initial commit: create task manager application
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git tag -a v1.0.0 -m "First stable release"
+fatal: tag 'v1.0.0' already exists
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git tag -d v1.0.0
+Deleted tag 'v1.0.0' (was f1a4ff7)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git tag -a v1.0.0 -m "First stable release"
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ python3 src/app.py
+Welcome to DevOps Task Manager
+
+Available Tasks:
+- Learn Git
+- Learn Docker
+- Learn Jenkins
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git status
+On branch main
+nothing to commit, working tree clean
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ ssh-keygen -t ed25519 -C "vinayak.gnit@gmail.com"
+Generating public/private ed25519 key pair.
+Enter file in which to save the key (/home/ec2-user/.ssh/id_ed25519):
+Enter passphrase for "/home/ec2-user/.ssh/id_ed25519" (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/ec2-user/.ssh/id_ed25519
+Your public key has been saved in /home/ec2-user/.ssh/id_ed25519.pub
+The key fingerprint is:
+SHA256:ziMdCyu5am5eEHHW+uRNui8HY0x2vzO2VadMOITebP4 vinayak.gnit@gmail.com
+The key's randomart image is:
++--[ED25519 256]--+
+|  . o.           |
+|   +  .    .     |
+|  .  .    . .    |
+|   .. + o. + .   |
+|  .  B.=S.. * o .|
+|   . .O*.o.o = o |
+|    +.o+*  .o o  |
+|  o. oo...=. .   |
+| =+..  +...+  E  |
++----[SHA256]-----+
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ eval "$(ssh-agent -s)"
+Agent pid 6795
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ ssh-add ~/.ssh/id_ed25519
+Identity added: /home/ec2-user/.ssh/id_ed25519 (vinayak.gnit@gmail.com)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ cat ~/.ssh/id_ed25519.pub
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIF3sj61l0sQa4Qp/zErx8b+mMXLAtzAq3t7XkNbQ9xks vinayak.gnit@gmail.com
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ ssh -T git@github.com
+The authenticity of host 'github.com (4.187.247.160)' can't be established.
+ED25519 key fingerprint is SHA256:+DiY3wvvV6TuJJhbpZisF/zLDA0zPMSvHdkr4UvCOqU.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'github.com' (ED25519) to the list of known hosts.
+Hi vinayakr27! You've successfully authenticated, but GitHub does not provide shell access.
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git remote add origin git@github.com:vinayakr27/devops-task-manager.git
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git remote -v
+origin  git@github.com:vinayakr27/devops-task-manager.git (fetch)
+origin  git@github.com:vinayakr27/devops-task-manager.git (push)
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git push -u origin main
+Enumerating objects: 58, done.
+Counting objects: 100% (58/58), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (56/56), done.
+Writing objects: 100% (58/58), 5.38 KiB | 1.08 MiB/s, done.
+Total 58 (delta 28), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (28/28), done.
+To github.com:vinayakr27/devops-task-manager.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git push
+Everything up-to-date
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git push -u origin development
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+remote:
+remote: Create a pull request for 'development' on GitHub by visiting:
+remote:      https://github.com/vinayakr27/devops-task-manager/pull/new/development
+remote:
+To github.com:vinayakr27/devops-task-manager.git
+ * [new branch]      development -> development
+branch 'development' set up to track 'origin/development'.
+[ec2-user@ip-172-31-0-109 devops-task-manager]$ git push origin --tags
+Enumerating objects: 1, done.
+Counting objects: 100% (1/1), done.
+Writing objects: 100% (1/1), 169 bytes | 169.00 KiB/s, done.
+Total 1 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+To github.com:vinayakr27/devops-task-manager.git
+ * [new tag]         v1.0.0 -> v1.0.0
