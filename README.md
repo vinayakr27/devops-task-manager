@@ -14,3 +14,4 @@ A simple Python application used to practice Git and GitHub.
 
 ## Run
 python3 src/app.py
+# Version 1.0
