@@ -17,3 +17,4 @@ python3 src/app.py
 # Version 1.0
 Upcoming features and development notes
 Reporting module documentation
+New documentation
